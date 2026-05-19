@@ -3,6 +3,7 @@ module.exports = grammar({
 
   extras: $ => [
     /[ \t\r]/,
+    $.comment,
   ],
 
   rules: {
@@ -67,5 +68,7 @@ module.exports = grammar({
     )),
 
     identifier: $ => /[A-Za-z_][A-Za-z0-9_]*/,
+
+    comment: $ => token(seq("#", /.*/)),
   },
 });
