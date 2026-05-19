@@ -239,5 +239,10 @@
   {
     "type": "number",
     "named": true
+  },
+  {
+    "type": "result_comment",
+    "named": true,
+    "extra": true
   }
 ]
