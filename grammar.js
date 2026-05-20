@@ -19,8 +19,14 @@ module.exports = grammar({
     ),
 
     statement: $ => choice(
+      $.section_header,
       $.assignment_statement,
       $.expression_statement,
+    ),
+
+    section_header: $ => seq(
+      field("name", $.identifier),
+      ":",
     ),
 
     assignment_statement: $ => seq(
@@ -33,7 +39,7 @@ module.exports = grammar({
 
     expression: $ => choice(
       $.number,
-      $.identifier,
+      $.qualified_identifier,
       $.parenthesized_expression,
       $.unary_expression,
       $.binary_expression,
@@ -70,7 +76,12 @@ module.exports = grammar({
 
     identifier: $ => /[A-Za-z_][A-Za-z0-9_]*/,
 
-    result_comment: $ => token(seq("#", /[ \t]*/, "=>", /.*/)),
+    qualified_identifier: $ => seq(
+      $.identifier,
+      repeat(seq(".", $.identifier)),
+    ),
+
+    result_comment: $ => token(seq("#", /[ \t]*/, "=", /.*/)),
 
     comment: $ => token(seq("#", /.*/)),
   },
