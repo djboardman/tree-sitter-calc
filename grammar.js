@@ -39,6 +39,11 @@ module.exports = grammar({
 
     expression: $ => choice(
       $.number,
+      $.currency,
+      $.money,
+      $.text,
+      $.boolean,
+      $.list,
       $.qualified_identifier,
       $.parenthesized_expression,
       $.unary_expression,
@@ -73,6 +78,37 @@ module.exports = grammar({
       /\d+(\.\d*)?/,
       /\.\d+/,
     )),
+
+    currency: $ => token(choice(
+      /[A-Z]{3}/,
+      "£",
+      "$",
+      "€",
+    )),
+
+    money: $ => token(seq(
+      choice(/[A-Z]{3}/, "£", "$", "€"),
+      choice(
+        /\d+(\.\d*)?/,
+        /\.\d+/,
+      ),
+    )),
+
+    text: $ => token(seq(
+      '"',
+      repeat(/[^"]/),
+      '"',
+    )),
+
+    boolean: $ => choice("true", "false"),
+
+    list: $ => seq(
+      "[",
+      $.expression,
+      repeat(seq(",", $.expression)),
+      optional(","),
+      "]",
+    ),
 
     identifier: $ => /[A-Za-z_][A-Za-z0-9_]*/,
 
